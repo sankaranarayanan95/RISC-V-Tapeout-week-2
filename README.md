@@ -194,6 +194,17 @@ gtkwave output/pre_synth_sim/pre_synth_sim.vcd
   </tr>
 </table>
 
+### **PRE SIMULATION**
+
+<p align="center">
+   <img src=".png" alt="GTKWave Counter Output" width="60%">
+</p>
+
+---
+
+### **POST SIMULATION**
+
+
 ---
 
 ### ✍️ **Explanations**
