@@ -1,4 +1,4 @@
-<img width="645" height="837" alt="image" src="https://github.com/user-attachments/assets/7468581e-8297-44e1-a3f7-e1469615657d" /># 🚀 GLS of BabySoC: Post-Synthesis Simulation 🧩
+# 🚀 GLS of BabySoC: Post-Synthesis Simulation 🧩
 
 ---
 
@@ -65,6 +65,9 @@ read_verilog /home/sankar_95/Desktop/VSDBabySoC/src/module/vsdbabysoc.v
 read_verilog -I /home/sankar_95/Desktop/VSDBabySoC/src/include /home/sankar_95/Desktop/VSDBabySoC/src/module/rvmyth.v
 read_verilog -I /home/sankar_95/Desktop/VSDBabySoC/src/include /home/sankar_95/Desktop/VSDBabySoC/src/module/clk_gate.v
 ```
+  <p align="center">
+   <img src="arch_microwatt.png" alt="GTKWave Counter Output" width="300%">
+</p>
 
 ---
 
@@ -75,6 +78,9 @@ read_liberty -lib /home/sankar_95/Desktop/VSDBabySoC/src/lib/avsdpll.lib
 read_liberty -lib /home/sankar_95/Desktop/VSDBabySoC/src/lib/avsddac.lib
 read_liberty -lib /home/sankar_95/Desktop/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 ```
+  <p align="center">
+   <img src="arch_microwatt.png" alt="GTKWave Counter Output" width="300%">
+</p>
 
 ---
 
@@ -85,6 +91,9 @@ read_liberty -lib /home/sankar_95/Desktop/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt
 ```yosys
 synth -top vsdbabysoc
 ```
+  <p align="center">
+   <img src="arch_microwatt.png" alt="GTKWave Counter Output" width="300%">
+</p>
 
 ---
 
@@ -93,6 +102,9 @@ synth -top vsdbabysoc
 ```yosys
 dfflibmap -liberty /home/sankar_95/Desktop/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 ```
+  <p align="center">
+   <img src="arch_microwatt.png" alt="GTKWave Counter Output" width="300%">
+</p>
 
 ---
 
@@ -102,6 +114,9 @@ dfflibmap -liberty /home/sankar_95/Desktop/VSDBabySoC/src/lib/sky130_fd_sc_hd__t
 opt
 abc -liberty /home/sankar_95/Desktop/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib -script +strash;scorr;ifraig;retime;{D};strash;dch,-f;map,-M,1,{D}
 ```
+  <p align="center">
+   <img src="arch_microwatt.png" alt="GTKWave Counter Output" width="300%">
+</p>
 
 ---
 
@@ -113,6 +128,9 @@ setundef -zero
 clean -purge
 rename -enumerate
 ```
+  <p align="center">
+   <img src="arch_microwatt.png" alt="GTKWave Counter Output" width="300%">
+</p>
 
 ---
 
@@ -121,14 +139,20 @@ rename -enumerate
 ```yosys
 stat
 ```
+  <p align="center">
+   <img src="arch_microwatt.png" alt="GTKWave Counter Output" width="300%">
+</p>
 
 ---
 
 ### 💾 **Step 8: Write the Synthesized Netlist**
 
 ```yosys
-write_verilog -noattr /home/ananya123/VSDBabySoCC/VSDBabySoC/output/post_synth_sim/vsdbabysoc.synth.v
+write_verilog -noattr /home/sankar_95/Desktop/VSDBabySoC/output/pre_synth_sim/vsdbabysoc.synth.v
 ```
+  <p align="center">
+   <img src="arch_microwatt.png" alt="GTKWave Counter Output" width="300%">
+</p>
 
 ---
 
