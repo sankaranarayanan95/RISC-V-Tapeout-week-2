@@ -1,4 +1,4 @@
-# 🚀 GLS of BabySoC: Post-Synthesis Simulation 🧩
+<img width="645" height="837" alt="image" src="https://github.com/user-attachments/assets/7468581e-8297-44e1-a3f7-e1469615657d" /># 🚀 GLS of BabySoC: Post-Synthesis Simulation 🧩
 
 ---
 
@@ -52,7 +52,7 @@ VSDBabySoC/
 
 ### 🧭 **Step 1: Load the Top-Level Design and Supporting Modules**
 
-Launch Yosys:
+Launch Yosys in the required directory:
 
 ```bash
 yosys
@@ -61,9 +61,9 @@ yosys
 Execute in the Yosys shell:
 
 ```yosys
-read_verilog /home/ananya123/VSDBabySoCC/VSDBabySoC/src/module/vsdbabysoc.v
-read_verilog -I /home/ananya123/VSDBabySoCC/VSDBabySoC/src/include /home/ananya123/VSDBabySoCC/src/module/rvmyth.v
-read_verilog -I /home/ananya123/VSDBabySoCC/VSDBabySoC/src/include /home/ananya123/VSDBabySoCC/src/module/clk_gate.v
+read_verilog /home/sankar_95/Desktop/VSDBabySoC/src/module/vsdbabysoc.v
+read_verilog -I /home/sankar_95/Desktop/VSDBabySoC/src/include /home/sankar_95/Desktop/VSDBabySoC/src/module/rvmyth.v
+read_verilog -I /home/sankar_95/Desktop/VSDBabySoC/src/include /home/sankar_95/Desktop/VSDBabySoC/src/module/clk_gate.v
 ```
 
 ---
@@ -71,14 +71,16 @@ read_verilog -I /home/ananya123/VSDBabySoCC/VSDBabySoC/src/include /home/ananya1
 ### 🔧 **Step 2: Load Liberty Files for Synthesis**
 
 ```yosys
-read_liberty -lib /home/ananya123/VSDBabySoCC/VSDBabySoC/src/lib/avsdpll.lib
-read_liberty -lib /home/ananya123/VSDBabySoCC/VSDBabySoC/src/lib/avsddac.lib
-read_liberty -lib /home/ananya123/VSDBabySoCC/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_liberty -lib /home/sankar_95/Desktop/VSDBabySoC/src/lib/avsdpll.lib
+read_liberty -lib /home/sankar_95/Desktop/VSDBabySoC/src/lib/avsddac.lib
+read_liberty -lib /home/sankar_95/Desktop/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 ```
 
 ---
 
 ### 🧮 **Step 3: Run Synthesis Targeting `vsdbabysoc`**
+
+-It replaces generic DFFs with technology-specific ones (from sky130_fd_sc_hd__tt_025C_1v80.lib) so timing, area, and power match the real silicon cells.
 
 ```yosys
 synth -top vsdbabysoc
@@ -89,7 +91,7 @@ synth -top vsdbabysoc
 ### 🔄 **Step 4: Map D Flip-Flops to Standard Cells**
 
 ```yosys
-dfflibmap -liberty /home/ananya123/VSDBabySoCC/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
+dfflibmap -liberty /home/sankar_95/Desktop/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 ```
 
 ---
@@ -98,7 +100,7 @@ dfflibmap -liberty /home/ananya123/VSDBabySoCC/VSDBabySoC/src/lib/sky130_fd_sc_h
 
 ```yosys
 opt
-abc -liberty /home/ananya123/VSDBabySoCC/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib -script +strash;scorr;ifraig;retime;{D};strash;dch,-f;map,-M,1,{D}
+abc -liberty /home/sankar_95/Desktop/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib -script +strash;scorr;ifraig;retime;{D};strash;dch,-f;map,-M,1,{D}
 ```
 
 ---
