@@ -66,7 +66,7 @@ read_verilog -I /home/sankar_95/Desktop/VSDBabySoC/src/include /home/sankar_95/D
 read_verilog -I /home/sankar_95/Desktop/VSDBabySoC/src/include /home/sankar_95/Desktop/VSDBabySoC/src/module/clk_gate.v
 ```
   <p align="center">
-   <img src="arch_microwatt.png" alt="GTKWave Counter Output" width="300%">
+   <img src="read_files.png" alt="GTKWave Counter Output" width="300%">
 </p>
 
 ---
@@ -79,7 +79,7 @@ read_liberty -lib /home/sankar_95/Desktop/VSDBabySoC/src/lib/avsddac.lib
 read_liberty -lib /home/sankar_95/Desktop/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 ```
   <p align="center">
-   <img src="arch_microwatt.png" alt="GTKWave Counter Output" width="300%">
+   <img src="read_lib.png" alt="GTKWave Counter Output" width="300%">
 </p>
 
 ---
@@ -92,7 +92,11 @@ read_liberty -lib /home/sankar_95/Desktop/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt
 synth -top vsdbabysoc
 ```
   <p align="center">
-   <img src="arch_microwatt.png" alt="GTKWave Counter Output" width="300%">
+   <img src="synth_top1.png" alt="GTKWave Counter Output" width="300%">
+</p>
+
+  <p align="center">
+   <img src="synth_top2.png" alt="GTKWave Counter Output" width="300%">
 </p>
 
 ---
@@ -103,7 +107,7 @@ synth -top vsdbabysoc
 dfflibmap -liberty /home/sankar_95/Desktop/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib
 ```
   <p align="center">
-   <img src="arch_microwatt.png" alt="GTKWave Counter Output" width="300%">
+   <img src="diff_map.png" alt="GTKWave Counter Output" width="300%">
 </p>
 
 ---
@@ -114,9 +118,6 @@ dfflibmap -liberty /home/sankar_95/Desktop/VSDBabySoC/src/lib/sky130_fd_sc_hd__t
 opt
 abc -liberty /home/sankar_95/Desktop/VSDBabySoC/src/lib/sky130_fd_sc_hd__tt_025C_1v80.lib -script +strash;scorr;ifraig;retime;{D};strash;dch,-f;map,-M,1,{D}
 ```
-  <p align="center">
-   <img src="arch_microwatt.png" alt="GTKWave Counter Output" width="300%">
-</p>
 
 ---
 
@@ -129,7 +130,7 @@ clean -purge
 rename -enumerate
 ```
   <p align="center">
-   <img src="arch_microwatt.png" alt="GTKWave Counter Output" width="300%">
+   <img src="flatten.png" alt="GTKWave Counter Output" width="300%">
 </p>
 
 ---
@@ -140,7 +141,7 @@ rename -enumerate
 stat
 ```
   <p align="center">
-   <img src="arch_microwatt.png" alt="GTKWave Counter Output" width="300%">
+   <img src="stat.png" alt="GTKWave Counter Output" width="300%">
 </p>
 
 ---
@@ -151,7 +152,7 @@ stat
 write_verilog -noattr /home/sankar_95/Desktop/VSDBabySoC/output/pre_synth_sim/vsdbabysoc.synth.v
 ```
   <p align="center">
-   <img src="arch_microwatt.png" alt="GTKWave Counter Output" width="300%">
+   <img src="write_synth.png" alt="GTKWave Counter Output" width="300%">
 </p>
 
 ---
