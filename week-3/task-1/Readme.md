@@ -1,4 +1,4 @@
-# 🧩 Week 3 Task — Post-Synthesis Gate-Level Simulation (GLS) 🚀
+# 🧩 Week 3 Task 1 — Post-Synthesis Gate-Level Simulation (GLS) 🚀
 
 ---
 
