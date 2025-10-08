@@ -39,6 +39,11 @@ flowchart LR
 
 - **Violations** lead to design failure or unpredictable behavior!
 
+  <p align="center">
+   <img src="img1.png" alt="GTKWave Counter Output" width="300%">
+</p>
+  
+
 ---
 
 ## 🔔 Clock Concepts
@@ -50,6 +55,10 @@ graph TD
     clk -- set_clock_latency --> ff2["FF2"]
 ```
 *Clock defined via `create_clock`, `create_generated_clock`, `set_clock_latency`*
+
+ <p align="center">
+   <img src="img2.png" alt="GTKWave Counter Output" width="300%">
+</p>
 
 **Important Parameters:**
 - **Jitter:** Random clock edge variation
@@ -81,6 +90,11 @@ graph TD
 | **Clk-Q Delay**| FF propagation time                                   | Timing margin |
 | **Setup/Hold**| Times from transistor-level simulation of FFs          | Reliability   |
 
+
+ <p align="center">
+   <img src="img4.png" alt="GTKWave Counter Output" width="300%">
+</p>
+
 ---
 
 ## ⚡ Variations & OCV
@@ -91,6 +105,9 @@ graph TD
 - **Pessimism Removal:**  
   - Prevents double-counting of skew/variation
 
+<p align="center">
+   <img src="img5.png" alt="GTKWave Counter Output" width="300%">
+</p>
 ---
 
 ## 📊 Jitter & Eye Diagram
