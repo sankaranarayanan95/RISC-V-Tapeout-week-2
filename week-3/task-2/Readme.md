@@ -40,7 +40,7 @@ flowchart LR
 - **Violations** lead to design failure or unpredictable behavior!
 
   <p align="center">
-   <img src="img1.png" alt="GTKWave Counter Output" width="300%">
+   <img src="img1.PNG" alt="GTKWave Counter Output" width="300%">
 </p>
   
 
@@ -57,7 +57,7 @@ graph TD
 *Clock defined via `create_clock`, `create_generated_clock`, `set_clock_latency`*
 
  <p align="center">
-   <img src="img2.png" alt="GTKWave Counter Output" width="300%">
+   <img src="img2.jpg" alt="GTKWave Counter Output" width="300%">
 </p>
 
 **Important Parameters:**
@@ -114,7 +114,9 @@ graph TD
 
 **Eye Diagram Example:**
 
-![Eye Diagram](https://upload.wikimedia.org/wikipedia/commons/7/7f/Eye_pattern_2level.png)
+<p align="center">
+   <img src="img6.png" alt="GTKWave Counter Output" width="300%">
+</p>
 *(Shows overlap of clock/data, used for jitter margin)*
 
 - **Jitter Analysis:** Ensures reliable setup timing even under clock variations
@@ -125,7 +127,10 @@ graph TD
 
 *(Example: Insert a histogram using matplotlib/seaborn, or link to a PNG in your repo)*
 
-![Slack Histogram Example](https://raw.githubusercontent.com/The-OpenROAD-Project/OpenSTA/main/docs/img/slack_histogram.png)
+<p align="center">
+   <img src="img7.png" alt="GTKWave Counter Output" width="300%">
+</p>
+
 > *Slack distribution across all timing paths. Negative slack (red) indicates violations.*
 
 ---
