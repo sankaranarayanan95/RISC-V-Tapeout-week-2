@@ -149,7 +149,7 @@ stat
 ### 💾 **Step 8: Write the Synthesized Netlist**
 
 ```yosys
-write_verilog -noattr /home/sankar_95/Desktop/VSDBabySoC/output/pre_synth_sim/vsdbabysoc.synth.v
+write_verilog -noattr /home/sankar_95/Desktop/VSDBabySoC/output/post_synth_sim/vsdbabysoc.synth.v
 ```
   <p align="center">
    <img src="write_synth.png" alt="GTKWave Counter Output" width="300%">
