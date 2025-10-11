@@ -193,15 +193,26 @@ cd output/post_synth_sim/
 gtkwave post_synth_sim.vcd
 ```
 
+ <p align="center">
+   <img src="week2img1.png" alt="GTKWave Counter Output" width="300%">
+</p>
+ <p align="center">
+   <img src="week2img2.png" alt="GTKWave Counter Output" width="300%">
+</p>
+
+
+
+# 📊 Pre vs Post Synthesis Comparison
+
+| 🧠 Simulation Type         | 🔍 Level   | 🎯 Purpose                              | 📁 Output            |
+| :------------------------- | :--------- | :-------------------------------------- | :------------------- |
+| 🌿 **Pre-Synthesis (RTL)** | Behavioral | Functional check before synthesis       | `pre_synth_sim.vcd`  |
+| ⚡ **Post-Synthesis (GLS)** | Structural | Checks real gate-level timing and logic | `post_synth_sim.vcd` |
+
+📈 **Waveform Comparison:**
+![Pre vs Post Synthesis](Images/Task1_Pre_Post_simualtionCompare.png)
+
 ---
-
-## 📷 **Waveform Screenshots**
-
-> **Note**: The following images showcase the waveform results. For actual images, refer to the provided GitHub links.
-
-- **Waveform 1**: [Link to Waveform 1](https://github.com/user-attachments/assets/9d79b832-7315-46ed-b028-e2dd5d14d27a)
-- **Waveform 2**: [Link to Waveform 2](https://github.com/user-attachments/assets/0a6d272d-1aae-45b5-b6aa-914a0087df84)
-- **Waveform 3**: [Link to Waveform 3](https://github.com/user-attachments/assets/239557c2-2447-4cd1-a18f-fb1966feebf2)
 
 ---
 
