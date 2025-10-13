@@ -43,6 +43,7 @@ Each week focuses on a key phase of the ASIC design flow — from environment se
 | **Yosys** | RTL Synthesis to Gate-level netlist |
 | **Sandpiper-SaaS** | TL-Verilog to Verilog conversion (`rvmyth.tlv`) |
 | **OpenSTA** | Static Timing Analysis |
+| **Ngspice** | Waveform generation |
 | **Ubuntu/Linux** | Development environment |
 
 ---
