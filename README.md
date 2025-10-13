@@ -30,6 +30,7 @@ Each week focuses on a key phase of the ASIC design flow — from environment se
 | Week 1 | RTL Design & Simulation | Pre-synthesis functional verification |
 | Week 2 | Synthesis | Gate-level netlist generation using Yosys |
 | Week 3 | Gate-Level Simulation (GLS) & STA Fundamentals | Post-synthesis functional validation |
+| Week 4 | NgspiceSky130 — CMOS Circuit Design and SPICE Simulation | Ngspice code and simulation |
 
 ---
 
