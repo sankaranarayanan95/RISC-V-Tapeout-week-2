@@ -963,3 +963,64 @@ plt.show()
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
 ```
+
+---
+
+## 📉 Section 11: Id vs Vds Curve - Understanding NMOS Characteristics
+
+### 🎯 **Overview**
+
+The **Id vs Vds curve** is a fundamental characteristic of an NMOS transistor, illustrating how the drain current (Id) varies with the drain-to-source voltage (Vds) for different gate-to-source voltages (Vgs). This curve is critical for understanding the transistor's behavior in both **linear** and **saturation** regions, enabling designers to optimize circuits for specific applications.
+
+---
+
+### 📐 **Key Concepts**
+
+The Id vs Vds curve showcases the NMOS transistor's operation across its three primary regions:
+
+1. **Cut-off Region**: Vgs < Vt, where Id ≈ 0 (transistor is OFF).
+2. **Linear (Resistive) Region**: Vgs > Vt and Vds < (Vgs - Vt), where Id increases with Vds.
+3. **Saturation Region**: Vgs > Vt and Vds ≥ (Vgs - Vt), where Id becomes relatively constant.
+
+The transition point between the linear and saturation regions occurs at **Vdsat = Vgs - Vt**, known as the saturation voltage.
+
+---
+
+### 📊 **Id vs Vds Curve**
+
+The following chart illustrates the Id vs Vds characteristics for an NMOS transistor with multiple Vgs values, highlighting the linear and saturation regions.
+
+  <p align="center">
+   <img src="day1_img1.png" alt="GTKWave Counter Output" width="300%">
+</p>
+
+```
+
+---
+
+### 🧮 **Mathematical Representation**
+
+The drain current (Id) in the **linear** and **saturation** regions is governed by the following equations, assuming typical SKY130 parameters (μn = 450 cm²/V·s, Cox = 7 fF/μm², W/L = 10/0.15, Vt = 0.5V):
+
+1. **Linear Region (Vds < Vgs - Vt)**:
+
+   ```
+   Id,lin = μn·Cox·(W/L)·[(Vgs - Vt)·Vds - Vds²/2]
+   ```
+
+   For small Vds, this simplifies to:
+
+   ```
+   Id,lin ≈ μn·Cox·(W/L)·(Vgs - Vt)·Vds
+   ```
+
+2. **Saturation Region (Vds ≥ Vgs - Vt)**:
+
+   ```
+   Id,sat = (1/2)·μn·Cox·(W/L)·(Vgs - Vt)²
+   ```
+
+   Including **channel length modulation** (λ ≈ 0.05 V⁻¹ for SKY130):
+
+   ```
+   Id,sat = (1/2)·μn·Cox·(W/L)·(Vgs - Vt)²·(1 + λ·Vds)
