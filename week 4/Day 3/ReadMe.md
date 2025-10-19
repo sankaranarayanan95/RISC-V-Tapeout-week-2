@@ -1,4 +1,4 @@
-<img width="1916" height="1045" alt="image" src="https://github.com/user-attachments/assets/a81dba62-dfe3-44db-9715-d5f1cd7654ba" /># 🌟 Day 3 — CMOS Inverter Analysis: Unleashing the Power of Complementary Design! ⚡
+# 🌟 Day 3 — CMOS Inverter Analysis: Unleashing the Power of Complementary Design! ⚡
 
 📅 **Date**: October 19, 2025  
 👩‍💻 **Author**: sankaranarayanan95  
