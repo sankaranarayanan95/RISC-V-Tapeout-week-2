@@ -122,7 +122,10 @@ Inspect the netlist:
 gedit day2_nfet_idvgs_L015_W039.spice
 ```
 
-*Image Reference*: [SPICE Netlist] Screenshot of the V_GS sweep setup. (See `Screenshot_2025-10-18_18-12-17.png`)
+ <p align="center">
+   <img src="file_2.png" alt="GTKWave Counter Output" width="300%">
+</p>
+
 
 ### Step 2: Run the Simulation:
 
