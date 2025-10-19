@@ -1,499 +1,174 @@
-# 🚀 NgspiceSky130 - Day 2: Velocity Saturation & CMOS Inverter VTC Magic
+# 🎓 Labs on Day 2: Scaling Down the NMOS World – From Macro to Micro Magic!
 
----
+Welcome to **Day 2** of our electrifying journey into circuit design using the Sky130 Process Design Kit (PDK)! Today, we dive deeper into NMOS transistor simulations, focusing on how *scaling*—shrinking those tiny dimensions—transforms device behavior. Think of it like upgrading from a bulky old smartphone to a sleek, modern one: smaller size, but with trade-offs in power, speed, and efficiency.
 
-<div align="center">
+This enhanced guide includes:
+- **Visual Flair**: References to graphs and images to make concepts pop! 📊
+- **Tables for Clarity**: Structured comparisons and data summaries.
+- **Creative Twists**: Analogies, real-world applications, and fun facts to keep things engaging.
+- **Deeper Insights**: Explanations on scaling effects, backed by semiconductor physics.
 
-```
-╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║   VELOCITY SATURATION & CMOS INVERTER VTC ADVENTURE         ║
-║                                                              ║
-║         SKY130 Circuit Design Workshop - Week 4 Day 2       ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
-```
+**Quick Recap from Day 1**: We simulated a larger NMOS transistor (assumed L=1.5 µm, W=3.9 µm for illustration—adjust based on your setup). Now, in Day 2, we scale down to L=0.15 µm and W=0.39 µm to observe changes like reduced saturation current and altered threshold voltages. Scaling boosts chip density and speed but introduces challenges like short-channel effects (e.g., threshold voltage roll-off and increased leakage).
 
-</div>
+> **Why Scaling Matters?** 🚀  
+> Moore’s Law drives us to shrink transistors for more powerful chips. But as dimensions drop below 1 µm, physics fights back: electrons misbehave in tight spaces, leading to higher electric fields, velocity saturation, and hot carrier effects. Reducing channel length (L) increases drive current but can degrade output resistance, critical for modern tech like smartphones and AI accelerators.
 
----
+## 📊 Transistor Parameter Comparison: Day 1 vs Day 2
 
-## 📚 Table of Contents
+To highlight scaling’s impact, here’s a comparison table (assuming Day 1 used larger dimensions—verify with your files):
 
-```
-┌─────────────────────────────────────────────────────────┐
-│ 1. 🔍 SPICE Simulation for Lower Nodes & Velocity Sat.  │
-│ 2. ⚡ 18-L1 SPICE Simulation for Lower Nodes            │
-│ 3. 📈 19-L2 Drain Current vs Gate Voltage (Long/Short) │
-│ 4. 🎢 20-L3 Velocity Saturation at Low/High E-Fields   │
-│ 5. 🧮 21-L4 Velocity Saturation Drain Current Model    │
-│ 6. 🛠️ 22-L5 Labs Sky130 Id-Vgs                        │
-│ 7. 📊 23-L6 Labs Sky130 Vt                             │
-│ 8. 🔌 24-L1 MOSFET as a Switch                         │
-│ 9. 📝 25-L2 Intro to Standard MOS V/I Parameters       │
-│ 10. 📉 26-L3 PMOS/NMOS Id vs Vd                        │
-│ 11. 🔄 27-L4 Step1: Convert PMOS G-S Voltage to Vin    │
-│ 12. 🔄 28-L5 Step2 & Step3: Convert PMOS/NMOS D-S to Vout │
-│ 13. 📈 29-L6 Step4: Merge PMOS-NMOS Load Curves & Plot VTC │
-└─────────────────────────────────────────────────────────┘
-```
+| Parameter          | Day 1 (Larger Device) | Day 2 (Scaled Device) | Scaling Effect |
+|--------------------|-----------------------|-----------------------|---------------|
+| **Channel Length (L)** | 1.5 µm (example)     | 0.15 µm              | Reduced L boosts speed but increases short-channel effects like Vth variation. |
+| **Channel Width (W)**  | 3.9 µm (example)     | 0.39 µm              | Narrower W lowers current drive but improves density. |
+| **Saturation Current (I_D,sat)** | Higher (~mA range)   | Slightly lower (~100 µA) | Due to velocity saturation in shorter channels. |
+| **Threshold Voltage (V_th)** | ~0.5-0.7 V           | ~0.45 V (shifted lower) | Roll-off effect in short channels. |
+| **Purpose**        | Baseline study       | Scaling analysis     | Observe trade-offs for nano-scale design. |
 
----
+*Fun Fact*: Scaling has packed billions of transistors into modern chips—your phone’s processor is a testament to this magic! Below 10nm, quantum effects like tunneling crash the party.
 
-## 🔍 Section 1: SPICE Simulation for Lower Nodes & Velocity Saturation Effect
+*Image Reference*: [ID vs VDS Curve] A classic NMOS I_D vs V_DS curve showing linear and saturation regions—notice how curves flatten in saturation! (See `Screenshot_2025-10-15_21-09-50.png`)
 
-### 🎯 **Introduction to Velocity Saturation in Lower Nodes**
+## 🌟 Day 2 – Simulation 1: I_D vs V_DS at Constant V_GS (Output Characteristics)
 
-In modern CMOS technologies like SKY130 (130nm), as we scale down to lower nodes, effects like **velocity saturation** become prominent. Carriers (electrons/holes) reach a maximum velocity under high electric fields, limiting current increase. SPICE simulations help model this for accurate predictions.
+Let’s kick off with the **output characteristics**—plotting Drain Current (I_D) against Drain-Source Voltage (V_DS) at fixed Gate-Source Voltage (V_GS). This reveals the transistor’s regions: **linear** (ohmic) at low V_DS, and **saturation** at high V_DS where current plateaus.
 
-![SPICE MOSFET Simulation](http://www.ece.mcgill.ca/~grober4/SPICE/SPICE_Decks/1st_Edition_LTSPICE/chapter5/Chapter%205%20MOSFETs%20web%20version%2026Apr21.fld/image063.png)
+### Step 1: Navigate to the Design Directory
 
-#### ✨ **Key Benefits of SPICE in Lower Nodes**
+Fire up your terminal and hop into the workshop’s design folder—your gateway to SPICE wonders!
 
-```
-┌──────────────────────┐
-│  LOWER NODE DESIGN   │
-│                      │
-└──────────┬───────────┘
-           │
-           ▼
-┌──────────────────────┐
-│  VELOCITY SAT MODEL  │
-│  (BSIM3/BSIM4)       │
-└──────────┬───────────┘
-           │
-           ▼
-┌──────────────────────┐
-│  SPICE SIMULATION    │
-│  (ngspice)           │
-└──────────┬───────────┘
-           │
-           ▼
-┌──────────────────────┐
-│  ACCURATE Id-Vds     │
-│  PREDICTIONS         │
-└──────────────────────┘
+```bash
+cd sky130CircuitDesignWorkshop/design/
 ```
 
-| **Aspect** | **Impact in Lower Nodes** | **SPICE Role** |
-|------------|---------------------------|---------------|
-| **Scaling** | Shorter channels → Higher E-fields | Models vsat parameter |
-| **Current Limit** | Id no longer ∝ (Vgs-Vt)^2 | Uses empirical equations |
-| **Performance** | Reduced gain, slower switching | Predicts delays accurately |
-| **Power** | Affects dynamic power | Simulates variations |
+This directory houses all `.spice` files, ready for action.
 
----
+### Step 2: Dive into the Simulation File
 
-### 💡 **Key Insight Box**
+**File**: `day2_nfet_idvds_L015_W039.spice`
 
-```
-╔══════════════════════════════════════════════════════════════╗
-║  🎓 LEARNING OBJECTIVE:                                      ║
-║                                                              ║
-║  Velocity saturation caps carrier speed in short channels,  ║
-║  altering classical MOSFET models. SPICE incorporates this  ║
-║  for realistic simulations in SKY130 PDK.                   ║
-║                                                              ║
-║  → Model short-channel effects                              ║
-║  → Optimize for power/performance                           ║
-║  → Validate against silicon data                            ║
-╚══════════════════════════════════════════════════════════════╝
-```
+#### 🔍 File Breakdown: What’s Inside?
 
----
+This SPICE netlist sets up a scaled NMOS for DC analysis, sweeping V_DS from 0 to V_DD (e.g., 1.8V) at fixed V_GS steps (e.g., 0.5V, 1.0V, 1.5V).
 
-## ⚡ Section 2: 18-L1 SPICE Simulation for Lower Nodes
+**Transistor Parameters**:
+- Channel Length (L): 0.15 µm
+- Channel Width (W): 0.39 µm
 
-### 📐 **Setting Up SPICE for Lower Node Simulations**
+**Key Equations**:
+- **Linear Region**: \( I_D = \mu_n C_{ox} \frac{W}{L} [(V_{GS} - V_{th}) V_{DS} - \frac{V_{DS}^2}{2}] \)
+- **Saturation Region**: \( I_D = \frac{1}{2} \mu_n C_{ox} \frac{W}{L} (V_{GS} - V_{th})^2 (1 + \lambda V_{DS}) \)
 
-Use ngspice with SKY130 models. Include velocity saturation via BSIM parameters like `vsat`, `pclm`.
+Where \(\mu_n\) is electron mobility, \(C_{ox}\) is oxide capacitance, and \(\lambda\) is channel-length modulation.
 
-Example Netlist:
+**Scaling Insight**: Shorter L increases I_D in saturation but amplifies \(\lambda\), reducing output resistance (curves slope more in saturation).
 
-```spice
-* SKY130 NMOS Simulation for Velocity Sat
-.include sky130_fd_pr__model__model.spice
+#### View the File’s Contents:
 
-M1 d g s b sky130_fd_pr__nfet_01v8 L=0.15u W=1u
-Vgs g s DC 1.8
-Vds d s DC 1.8
-.dc Vds 0 1.8 0.01
-.print dc i(Vds)
-.end
+Peek inside with Vim—edit if you dare (e.g., tweak V_GS steps for more curves)!
+
+```bash
+gedit day2_nfet_idvds_L015_W039.spice
 ```
 
-![SPICE MOSFET Setup](http://www.ece.mcgill.ca/~grober4/SPICE/SPICE_Decks/1st_Edition_LTSPICE/chapter5/Chapter%205%20MOSFETs%20web%20version%2026Apr21.fld/image001.png)
+  <p align="center">
+   <img src="spice_file.png" alt="GTKWave Counter Output" width="300%">
+</p>
 
----
 
-### 🧮 **Equation for Saturated Current with Vsat**
+#### Run the Simulation & Plot:
 
-```
-╔═══════════════════════════════════════════════════════════════╗
-║                                                               ║
-║   Id,sat = W * Cox * vsat * (Vgs - Vt)                      ║
-║                                                               ║
-║   (Instead of classical (1/2)μCox(W/L)(Vgs-Vt)^2)           ║
-║                                                               ║
-║   vsat ≈ 10^7 cm/s for electrons in Si                      ║
-║                                                               ║
-╚═══════════════════════════════════════════════════════════════╝
+Launch NGSPICE and plot the magic:
+
+```bash
+ngspice day2_nfet_idvds_L015_W039.spice
+plot -vdd#branch
 ```
 
----
+  <p align="center">
+   <img src="plot_1.png" alt="GTKWave Counter Output" width="300%">
+</p>
 
-### 📊 **Simulation Results Table**
+The result? Stunning I_D vs V_DS curves!
 
-| Vds (V) | Id (mA) without Vsat | Id (mA) with Vsat | Difference (%) |
-|---------|----------------------|-------------------|---------------|
-| 0.5     | 0.45                 | 0.42              | -6.7          |
-| 1.0     | 0.90                 | 0.75              | -16.7         |
-| 1.5     | 1.35                 | 0.95              | -29.6         |
-| 1.8     | 1.62                 | 1.00              | -38.3         |
 
----
+**Creative Analogy**: Imagine I_D as traffic on a highway (V_DS). At low traffic (low V_DS), flow is smooth (linear). Jam it up (high V_DS), and flow caps out (saturation)—scaling is like narrowing lanes for faster cars but more bottlenecks!
 
-## 📈 Section 3: 19-L2 Drain Current vs Gate Voltage for Long and Short Channel Device
+**Bonus Graph Interpretation Table**:
 
-### 🔬 **Long vs Short Channel Id-Vgs**
+| V_GS Level | Linear Region Observation | Saturation Current (Approx.) | Key Insight |
+|------------|---------------------------|------------------------------|-------------|
+| 0.5V       | Gentle slope             | Low (~10 µA)                | Near threshold, weak inversion. |
+| 1.0V       | Steeper rise             | Medium (~100 µA)            | Strong inversion, good for switching. |
+| 1.5V       | Aggressive current       | High (~500 µA)              | Max drive, but watch power! |
 
-In long channels, Id ∝ (Vgs-Vt)^2. In short channels, velocity saturation makes Id ∝ (Vgs-Vt).
+*Image Reference*: [Detailed MOSFET Curves] Spot the “knee” where saturation kicks in! (Placeholder: Search “MOSFET ID vs VDS curve” for a detailed example.)
 
-![Id-Vgs Long/Short Channel](https://www.researchgate.net/publication/260513606/figure/fig2/AS:297295322075137@1447892136352/Drain-current-versus-gate-voltage-of-short-channel-undoped-SRG-MOSFET-model-in-a.png)
+## 🚀 Day 2 – Simulation 2: I_D vs V_GS at Constant V_DS (Transfer Characteristics)
 
----
+Now, shift gears to **transfer characteristics**—I_D vs V_GS at fixed V_DS (e.g., 0.1V for linear or 1.8V for saturation). This unveils the transistor’s “switching secret”: the threshold voltage (V_th) where it turns on.
 
-### 📊 **Id-Vgs Graph**
+**File**: `day2_nfet_idvgs_L015_W039.spice`
 
-```
-Id (μA/μm)
-  │
-  │         Long Channel (Quadratic)
-  │        ╱──────────
-  │      ╱
-  │    ╱
-  │  ╱
-  │╱   Short Channel (Linear due to Vsat)
-  │     ╱──────────
-  │   ╱
-  │ ╱
-  ├─────────────────────────> Vgs (V)
-  Vt
+**Purpose Twist**: Beyond basics, this extracts transconductance (\( g_m = \frac{dI_D}{dV_{GS}} \)), key for amplifier design.
+
+**Scaling Effect**: Shorter L lowers V_th slightly due to drain-induced barrier lowering (DIBL), making the device leakier but faster.
+
+### Step 1: View the File’s Contents
+
+Inspect the netlist:
+
+```bash
+gedit day2_nfet_idvgs_L015_W039.spice
 ```
 
----
+*Image Reference*: [SPICE Netlist] Screenshot of the V_GS sweep setup. (See `Screenshot_2025-10-18_18-12-17.png`)
 
-### 📋 **Comparison Table**
+### Step 2: Run the Simulation:
 
-| Channel Length | Id Behavior | Reason |
-|----------------|-------------|--------|
-| Long (>1μm) | Quadratic | Drift dominant |
-| Short (<0.2μm) | Linear | Velocity saturation |
-
----
-
-## 🎢 Section 4: 20-L3 Velocity Saturation at Lower and Higher Electric Fields
-
-### 🌊 **Velocity vs E-Field**
-
-At low fields, v = μE. At high fields, v = vsat.
-
-![Velocity vs E-Field](https://www.researchgate.net/publication/3065865/figure/fig2/AS:667817640730648@1536231541978/Electron-velocity-versus-electric-field-characteristics-for-several-semiconductors-N.png)
-
----
-
-### 📐 **Critical Field Equation**
-
-```
-╔══════════════════════════════════════════════╗
-║                                              ║
-║   Ec = vsat / μ  (≈ 2×10^4 V/cm for Si)    ║
-║                                              ║
-║   In SKY130, for short L, E > Ec easily.   ║
-║                                              ║
-╚══════════════════════════════════════════════╝
+```bash
+ngspice day2_nfet_idvgs_L015_W039.spice
+plot -vdd#branch
 ```
 
----
+ <p align="center">
+   <img src="plot_2.png" alt="GTKWave Counter Output" width="300%">
+</p>
 
-### 📊 **Velocity Saturation Curve**
+The curve rises exponentially post-V_th.
 
-```chartjs
-{
-  "type": "line",
-  "data": {
-    "labels": [0, 1e4, 2e4, 3e4, 4e4, 5e4],
-    "datasets": [
-      {
-        "label": "Electron Velocity",
-        "data": [0, 0.5e7, 0.9e7, 1e7, 1e7, 1e7],
-        "borderColor": "#36A2EB",
-        "fill": false,
-        "tension": 0.4
-      }
-    ]
-  },
-  "options": {
-    "scales": {
-      "x": {
-        "title": { "display": true, "text": "Electric Field (V/cm)" }
-      },
-      "y": {
-        "title": { "display": true, "text": "Velocity (cm/s)" }
-      }
-    }
-  }
-}
-```
 
----
+**Real-World Application**: In CPUs, low V_th from scaling enables faster switching, but higher leakage drains batteries—hence power-gating techniques!
 
-## 🧮 Section 5: 21-L4 Velocity Saturation Drain Current Model
+**Extracted Metrics Table** (Typical Values):
 
-### 📐 **Modified Id Equation**
+| Metric             | Value (Approx.) | Description |
+|--------------------|-----------------|-------------|
+| **Threshold Voltage (V_th)** | 0.45 V         | Point where I_D rises sharply. |
+| **Transconductance (g_m)**   | 100 µS/µm      | Slope in saturation—measures amplification. |
+| **Subthreshold Slope**       | 80 mV/dec      | How sharply it turns off—ideal is 60 mV/dec. |
 
-For short channels:
+*Image Reference*: [I_D vs V_GS Curve] Exponential rise post-threshold. (Placeholder: Search “MOSFET ID vs VGS curve” for a clear example.)
 
-```
-╔═══════════════════════════════════════════════════════════════╗
-║                                                               ║
-║   Id = μCox (W/L) (Vgs - Vt) Vds / (1 + Vds/(L*Ec))         ║
-║                                                               ║
-║   In saturation: Id,sat = vsat Cox W (Vgs - Vt)             ║
-║                                                               ║
-║   SKY130 BSIM model includes pclm, lambda for CLM.          ║
-║                                                               ║
-╚═══════════════════════════════════════════════════════════════╝
-```
+## 🌌 Summary & Beyond: Unleashing Nano-Scale Potential
+
+**Day 2 Highlights**:
+- Scaled NMOS shows nuanced changes: lower currents but potential for denser circuits.
+- Mastered I_D vs V_DS (output) and I_D vs V_GS (transfer) via NGSPICE.
+- Learned scaling pros (speed, density) and cons (leakage, variability).
+
+**Creative Challenge**: Imagine designing a chip for Mars rovers—how would scaling help endure radiation while saving power? Tweak L/W in SPICE and plot differences!
+
+**Next Steps**:
+- Explore PMOS simulations for complementary insights.
+- Try inverter designs to see NMOS-PMOS interplay.
+- Keep simulating—the circuit universe awaits! ⚡
+
+*Image Reference*: [Combined MOSFET Curves] Holistic view of output and transfer characteristics. (Placeholder: Search “MOSFET characteristic curves” for a combined plot.)
 
 ---
 
-### 🔧 **Model Parameters**
-
-| Parameter | Description | Typical Value (SKY130 NMOS) |
-|-----------|-------------|-----------------------------|
-| vsat | Saturation velocity | 8e6 cm/s |
-| pclm | Channel length mod param | 1.3 |
-| lambda | CLM coefficient | 0.06 /V |
-
----
-
-## 🛠️ Section 6: 22-L5 Labs Sky130 Id-Vgs
-
-### 🔬 **Lab Setup: Plotting Id-Vgs**
-
-Use ngspice to sweep Vgs, measure Id at Vds=1.8V.
-
-![Sky130 Id-Vgs Plot](https://user-images.githubusercontent.com/57392031/177392985-69752895-cf82-4813-bb4e-1ca460f9d4ac.png)
-
----
-
-### 📊 **Lab Results Table**
-
-| Vgs (V) | Id (mA) L=0.15u | Id (mA) L=1u |
-|---------|-----------------|--------------|
-| 0.5     | 0.01            | 0.005        |
-| 1.0     | 0.5             | 0.3          |
-| 1.5     | 1.2             | 0.8          |
-| 1.8     | 1.8             | 1.2          |
-
-Observe linear vs quadratic.
-
----
-
-## 📊 Section 7: 23-L6 Labs Sky130 Vt
-
-### 🧲 **Threshold Voltage Measurement**
-
-Vt extracted from Id-Vgs at low Id.
-
-![Sky130 Vt Plot](https://user-images.githubusercontent.com/11010763/189552117-801968ff-44ef-4ced-a2bc-bff114d6921a.png)
-
----
-
-### 📋 **Vt Variation Table**
-
-| Variant | Vt (V) TT | Min/Max |
-|---------|-----------|---------|
-| Std NMOS | 0.538     | 0.515/0.567 |
-| Low-Vt   | 0.434     | 0.415/0.465 |
-| High-Vt  | N/A       | N/A     |
-
-Use .op in SPICE for Vt.
-
----
-
-## 🔌 Section 8: 24-L1 MOSFET as a Switch
-
-### 📐 **MOSFET Switch Basics**
-
-MOSFET acts as voltage-controlled switch: ON in saturation/linear, OFF in cutoff.
-
-![MOSFET Switch Diagram](https://www.electronics-tutorials.ws/wp-content/uploads/2013/09/tran57.gif)
-
----
-
-### ⚙️ **Switch Characteristics**
-
-| Mode | Condition | Rds |
-|------|-----------|-----|
-| OFF  | Vgs < Vt | High (>GΩ) |
-| ON   | Vgs > Vt, Vds small | Low (mΩ) |
-
-Flow Chart for Switch Operation:
-
-```mermaid
-flowchart TD
-    A[Apply Vgs] --> B{Vgs > Vt?}
-    B -->|Yes| C[ON: Channel Forms]
-    B -->|No| D[OFF: No Current]
-    C --> E[Low Rds, Current Flows]
-    D --> F[High Rds, No Current]
-```
-
----
-
-## 📝 Section 9: 25-L2 Introduction to Standard MOS Voltage Current Parameters
-
-### 🔧 **Standard Parameters**
-
-![MOS Parameters Table](https://anysilicon.com/wp-content/uploads/2021/11/img_618420cc3415c.png)
-
----
-
-### 📊 **Key Parameters Table**
-
-| Parameter | Symbol | Description |
-|-----------|--------|-------------|
-| Threshold Voltage | Vt | Min Vgs for conduction |
-| Saturation Current | Idsat | Max Id in sat region |
-| Transconductance | gm | ΔId/ΔVgs |
-| Output Resistance | ro | 1/λIdsat |
-
----
-
-## 📉 Section 10: 26-L3 PMOS/NMOS Drain Current v/s Drain Voltage
-
-### 📈 **Id-Vds Curves for PMOS/NMOS**
-
-![PMOS NMOS Id-Vds](https://www.researchgate.net/publication/3431920/figure/fig3/AS:654088282845184@1532958207650/Drain-current-versus-drain-voltage-for-a-PMOS-FET-with-a-poly-gate-and-one-with-the-SiO.png)
-
-NMOS: Positive voltages, PMOS: Negative.
-
----
-
-### 📊 **Comparison Table**
-
-| Device | Polarity | Id Direction |
-|--------|----------|--------------|
-| NMOS   | N-channel | Source to Drain |
-| PMOS   | P-channel | Drain to Source |
-
----
-
-## 🔄 Section 11: 27-L4 Step1 - Convert PMOS Gate-Source-Voltage to Vin
-
-### 🔄 **Step 1: PMOS GSV to Vin**
-
-For CMOS inverter, PMOS Vgs = Vin - Vdd.
-
-Equation:
-
-```
-╔════════════════════════════╗
-║                            ║
-║   Vgs_p = Vin - Vdd       ║
-║                            ║
-║   (Since source at Vdd)   ║
-║                            ║
-╚════════════════════════════╝
-```
-
-Flow Chart:
-
-```mermaid
-flowchart LR
-    A[Vin] --> B[PMOS Gate]
-    C[Vdd] --> D[PMOS Source]
-    B & D --> E[Vgs_p = Vin - Vdd]
-```
-
----
-
-## 🔄 Section 12: 28-L5 Step2 & Step3 - Convert PMOS and NMOS Drain-Source-Voltage to Vout
-
-### 🔄 **Steps 2 & 3: DSV to Vout**
-
-NMOS Vds_n = Vout, PMOS Vds_p = Vout - Vdd.
-
-Equations:
-
-```
-╔════════════════════════════╗
-║                            ║
-║   Vds_n = Vout            ║
-║   Vds_p = Vout - Vdd      ║
-║                            ║
-╚════════════════════════════╝
-```
-
----
-
-### 📊 **Voltage Mapping Table**
-
-| Transistor | Vds Expression |
-|------------|----------------|
-| NMOS       | Vout           |
-| PMOS       | Vout - Vdd     |
-
----
-
-## 📈 Section 13: 29-L6 Step4 - Merge PMOS - NMOS Load Curves and Plot VTC
-
-### 📉 **Merging Load Curves for VTC**
-
-Plot Id_p = -Id_n vs Vout to find intersection points for VTC.
-
-![CMOS Load Curves](https://www.researchgate.net/publication/281579094/figure/fig4/AS:284508239745027@1444843458236/a-nMOS-and-b-pMOS-curves-of-normalized-drain-current-i-versus-g-m-I-D.png)
-
----
-
-### 📊 **VTC Graph**
-
-```chartjs
-{
-  "type": "line",
-  "data": {
-    "labels": [0, 0.5, 1.0, 1.5, 1.8],
-    "datasets": [
-      {
-        "label": "Vout vs Vin",
-        "data": [1.8, 1.8, 0.9, 0, 0],
-        "borderColor": "#FF6384",
-        "fill": false,
-        "tension": 0.1
-      }
-    ]
-  },
-  "options": {
-    "scales": {
-      "x": { "title": { "text": "Vin (V)" } },
-      "y": { "title": { "text": "Vout (V)" } }
-    }
-  }
-}
-```
-
----
-
-### 💡 **Key Takeaway**
-
-```
-╔══════════════════════════════════════════════════════════╗
-║  🎯 VTC DERIVATION INSIGHT:                              ║
-║                                                          ║
-║  Merging PMOS/NMOS curves reveals switching points,      ║
-║  noise margins, and gain for robust digital design.      ║
-║                                                          ║
-╚══════════════════════════════════════════════════════════╝
-```
+**References**:
+1. Moore’s Law and scaling principles: Semiconductor textbooks (e.g., Streetman & Banerjee).
+2. Short-channel effects: IEEE Journals on Electron Devices.
+3. SPICE simulation techniques: Sky130 PDK documentation.
