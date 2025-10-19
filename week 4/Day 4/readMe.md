@@ -91,8 +91,10 @@ plot out vs in
 wrdata vtc_out.csv in out
 .endc
 ```
+  <p align="center">
+   <img src="plot_5.png" alt="GTKWave Counter Output" width="300%">
+</p>
 
-*Image Reference*: [NGSPICE Terminal] Screenshot of NGSPICE command execution and plot output. (See `29dc3d93-9f98-403f-a2b3-238120282889.png` and `996f654a-5b41-4ded-b1ab-9a126820bca9.png`.)
 
 ---
 
