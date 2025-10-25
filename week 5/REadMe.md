@@ -157,7 +157,11 @@ This opens the **OpenROAD GUI**, showcasing the **floorplan**, **placement**, an
 | Timing Charts        | Displays slack and timing metrics         |
 
 📸 **GUI Snapshot**  
-![OpenROAD GUI](https://via.placeholder.com/600x400.png?text=OpenROAD+GUI+Visualization)
+
+  <p align="center">
+   <img src="installation.jpg" alt="GTKWave Counter Output" width="300%">
+</p>
+
 
 ---
 
