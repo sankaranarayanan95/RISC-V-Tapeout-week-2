@@ -163,7 +163,7 @@ This opens the **OpenROAD GUI**, showcasing the **floorplan**, **placement**, an
 📸 **GUI Snapshot**  
 
   <p align="center">
-   <img src="installation.jpg" alt="GTKWave Counter Output" width="300%">
+   <img src="installation6.jpg" alt="GTKWave Counter Output" width="300%">
 </p>
 
 
