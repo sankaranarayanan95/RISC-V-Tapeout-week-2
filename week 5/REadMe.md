@@ -72,7 +72,11 @@ This script sets up all required libraries and tools for compilation.
 📸 **Visual Checkpoint**  
 
  <p align="center">
-   <img src="setup.png" alt="GTKWave Counter Output" width="300%">
+   <img src="setup1.png" alt="GTKWave Counter Output" width="300%">
+</p>
+
+<p align="center">
+   <img src="setup2.png" alt="GTKWave Counter Output" width="300%">
 </p>
 
 ---
